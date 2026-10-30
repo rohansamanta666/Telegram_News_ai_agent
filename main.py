@@ -69,11 +69,22 @@ def main():
     """Start database, scheduler, cloud health server, and Telegram bot loop."""
     print_banner()
 
+    # Start cloud health server FIRST if PORT is provided (Render / Koyeb / Fly)
+    maybe_start_health_server()
+
     # Ensure SQLite directory and tables exist
     init_database()
 
-    # Start cloud health server if PORT is provided (Render / Koyeb / Fly)
-    maybe_start_health_server()
+    token = settings.telegram_bot_token
+    if not token or token == "your_telegram_bot_token_here":
+        logger.error(
+            "❌ CRITICAL CONFIGURATION ERROR:\n"
+            "TELEGRAM_BOT_TOKEN is not set in Environment Variables!\n"
+            "Please go to your Render Dashboard -> Environment -> Add 'TELEGRAM_BOT_TOKEN'."
+        )
+        import time
+        while True:
+            time.sleep(10)
 
     # Build python-telegram-bot application with JobQueue
     logger.info("Initializing Telegram bot and armed scheduler...")

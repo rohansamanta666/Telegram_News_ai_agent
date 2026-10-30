@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     # Telegram
-    telegram_bot_token: str = Field(..., alias="TELEGRAM_BOT_TOKEN")
+    telegram_bot_token: str = Field("", alias="TELEGRAM_BOT_TOKEN")
     telegram_allowed_chat_ids: str = Field("", alias="TELEGRAM_ALLOWED_CHAT_IDS")
 
     # LLM (Google Gemini)
